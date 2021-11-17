@@ -16,10 +16,14 @@ class URLSessionHTTPClient {
         self.session = session
     }
 
+    struct UnexpectedError: Error {}
+
     func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
         session.dataTask(with: url) { _, _, error in
             if let error = error {
                 completion(.failure(error))
+            } else {
+                completion(.failure(UnexpectedError()))
             }
         }.resume()
     }
@@ -39,9 +43,7 @@ final class URLSessionHTTPClientTests: XCTestCase {
     }
 
     func test_getFromURL_performsGetResquestWithURL() {
-
-
-        let url = URL(string: "https://any-url.com")!
+        let url = anyURL()
         let exp = expectation(description: "Wait for request")
 
         URLProtocolStub.observeRequests { request in
@@ -56,26 +58,29 @@ final class URLSessionHTTPClientTests: XCTestCase {
     }
 
     func test_getFromURL_failsOnRequestError() {
-        let url = URL(string: "https://any-url.com")!
-        let error = NSError(domain: "any error", code: 1, userInfo: nil)
-        URLProtocolStub.stub(data: nil, response: nil, error: error)
-        let sut = makeSUT()
+        let requestError = NSError(domain: "any error", code: 1, userInfo: nil)
+        let receivedError = resultErrorFor(data: nil, response: nil, error: requestError) as NSError?
 
-        let exp = expectation(description: "Wait for get completion")
+        XCTAssertEqual(receivedError?.code, requestError.code)
+        XCTAssertEqual(receivedError?.domain, requestError.domain)
+    }
 
-        sut.get(from: url) { result in
-            switch result {
-            case .failure(let receivedError as NSError):
-                XCTAssertEqual(receivedError.domain, error.domain)
-                XCTAssertEqual(receivedError.code, error.code)
-            default:
-                XCTFail("Expected failure \(error), got \(result) instead")
-            }
+    func test_getFromURL_failsOnAllInvalidScenarios() {
+        let anyURLResponse = URLResponse()
+        let anyHTTPURLResponse = HTTPURLResponse()
+        let anyData = Data()
+        let anyError = NSError(domain: "any error", code: 1, userInfo: nil)
 
-            exp.fulfill()
-        }
-
-        wait(for: [exp], timeout: 1.0)
+        XCTAssertNotNil(resultErrorFor(data: nil, response: nil, error: nil))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: anyURLResponse, error: nil))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: anyHTTPURLResponse, error: nil))
+        XCTAssertNotNil(resultErrorFor(data: anyData, response: nil, error: nil))
+        XCTAssertNotNil(resultErrorFor(data: anyData, response: nil, error: anyError))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: anyURLResponse, error: anyError))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: anyHTTPURLResponse, error: anyError))
+        XCTAssertNotNil(resultErrorFor(data: anyData, response: anyURLResponse, error: anyError))
+        XCTAssertNotNil(resultErrorFor(data: anyData, response: anyHTTPURLResponse, error: anyError))
+        XCTAssertNotNil(resultErrorFor(data: anyData, response: anyURLResponse, error: nil))
     }
 }
 
@@ -86,6 +91,33 @@ extension URLSessionHTTPClientTests {
         trackForMamoryLeaks(sut)
 
         return sut
+    }
+
+    private func anyURL() -> URL {
+        return URL(string: "https://any-url.com")!
+    }
+
+    private func resultErrorFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #file, line: UInt = #line) -> Error? {
+        URLProtocolStub.stub(data: nil, response: nil, error: error)
+        let sut = makeSUT(file: file, line: line)
+
+        let exp = expectation(description: "Wait for get completion")
+
+        var receivedError: Error?
+        sut.get(from: anyURL()) { result in
+            switch result {
+            case .failure(let error as NSError):
+                receivedError = error
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+
+            exp.fulfill()
+        }
+
+        wait(for: [exp], timeout: 1.0)
+
+        return receivedError
     }
 }
 
