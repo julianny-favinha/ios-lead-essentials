@@ -87,7 +87,7 @@ extension URLSessionHTTPClientTests {
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> HTTPClient {
         let sut = URLSessionHTTPClient()
 
-        trackForMamoryLeaks(sut)
+        trackForMemoryLeaks(sut)
 
         return sut
     }

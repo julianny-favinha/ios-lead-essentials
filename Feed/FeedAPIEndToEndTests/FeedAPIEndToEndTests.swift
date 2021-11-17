@@ -28,8 +28,8 @@ extension FeedAPIEndToEndTests {
         let client = URLSessionHTTPClient()
         let loader = RemoteFeedLoader(client: client, url: url)
 
-        trackForMamoryLeaks(client, file: file, line: line)
-        trackForMamoryLeaks(loader, file: file, line: line)
+        trackForMemoryLeaks(client, file: file, line: line)
+        trackForMemoryLeaks(loader, file: file, line: line)
 
         let exp = expectation(description: "Wait for load completion")
 

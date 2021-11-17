@@ -98,8 +98,8 @@ extension RemoteFeedLoaderTests {
         let client = HTTPClientSpy()
         let sut = RemoteFeedLoader(client: client, url: url)
 
-        trackForMamoryLeaks(sut, file: file, line: line)
-        trackForMamoryLeaks(client, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(client, file: file, line: line)
 
         return (sut: sut, httpClientSpy: client)
     }
