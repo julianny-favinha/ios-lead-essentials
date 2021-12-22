@@ -69,8 +69,8 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     func test_load_deliversItemsOn200HTTPResponseWithJSONItems() {
         let (sut, client) = makeSut()
 
-        let item1 = makeItem(id: UUID(), description: nil, location: nil, imageURL: URL(string: "http://a-url.com")!)
-        let item2 = makeItem(id: UUID(), description: nil, location: nil, imageURL: URL(string: "http://a-url2.com")!)
+        let item1 = makeItem(id: UUID(), description: nil, location: nil, url: URL(string: "http://a-url.com")!)
+        let item2 = makeItem(id: UUID(), description: nil, location: nil, url: URL(string: "http://a-url2.com")!)
 
         expect(sut, toCompleteWithResult: .success([item1.model, item2.model]), when: {
             let json = makeItemsJSON([item1.json, item2.json])
@@ -124,14 +124,14 @@ extension LoadFeedFromRemoteUseCaseTests {
         wait(for: [exp], timeout: 1.0)
     }
 
-    private func makeItem(id: UUID, description: String?, location: String?, imageURL: URL) -> (model: FeedItem, json: [String: Any]) {
-        let model = FeedItem(id: id, description: description, location: location, imageURL: imageURL)
+    private func makeItem(id: UUID, description: String?, location: String?, url: URL) -> (model: FeedImage, json: [String: Any]) {
+        let model = FeedImage(id: id, description: description, location: location, url: url)
 
         let json = [
             "id": model.id.uuidString,
             "description": model.description,
             "location": model.location,
-            "image": model.imageURL.absoluteString
+            "image": model.url.absoluteString
         ].reduce(into: [String: Any]()) { (acc, e) in
             if let value = e.value { acc[e.key] = value }
         }
