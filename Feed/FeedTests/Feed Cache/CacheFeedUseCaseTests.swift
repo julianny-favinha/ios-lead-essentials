@@ -120,17 +120,6 @@ extension CacheFeedUseCaseTests {
         return (sut: sut, store: store)
     }
 
-    private func uniqueImages() -> (model: [FeedImage], local: [LocalFeedImage]) {
-        let images = [
-            FeedImage(id: UUID(), description: "description", location: "location", url: URL(string: "https://any.com")!),
-            FeedImage(id: UUID(), description: "description", location: "location", url: URL(string: "https://any.com")!)
-        ]
-
-        let local = images.map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
-
-        return (model: images, local: local)
-    }
-
     private func expect(_ sut: LocalFeedLoader, toCompleteWithError expectedError: NSError?, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         let exp = expectation(description: "wait for completion")
 
@@ -145,9 +134,5 @@ extension CacheFeedUseCaseTests {
         wait(for: [exp], timeout: 1.0)
 
         XCTAssertEqual(receivedError as NSError?, expectedError)
-    }
-
-    private func anyNSError() -> NSError {
-        .init(domain: "", code: 0, userInfo: nil)
     }
 }
