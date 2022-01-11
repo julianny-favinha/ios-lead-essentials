@@ -8,7 +8,11 @@
 import Foundation
 
 extension Date {
-    func adding(days: Int) -> Date {
+    func minusFeedCache() -> Date {
+        return adding(days: -7)
+    }
+    
+    private func adding(days: Int) -> Date {
         return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
     }
 
