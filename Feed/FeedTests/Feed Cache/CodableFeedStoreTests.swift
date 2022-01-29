@@ -105,8 +105,6 @@ class CodableFeedStoreTests: XCTestCase, FailableFeedStoreSpecs {
         let noDeletePermissionURL = cachesDirectory()
         let sut = makeSUT(storeURL: noDeletePermissionURL)
 
-        let receivedError = deleteCachedFeed(from: sut)
-
         assertThatDeleteDeliversErrorOnDeletionError(on: sut)
     }
 
