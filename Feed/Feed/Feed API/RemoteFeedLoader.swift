@@ -31,7 +31,7 @@ public final class RemoteFeedLoader: FeedLoader {
             guard self != nil else { return }
 
             switch result {
-            case .success(let httpResponse, let data):
+            case .success((let httpResponse, let data)):
                 do {
                     let remoteFeedItems = try RemoteFeedItemsMapper.map(data, from: httpResponse)
                     completion(.success(remoteFeedItems.toModels()))

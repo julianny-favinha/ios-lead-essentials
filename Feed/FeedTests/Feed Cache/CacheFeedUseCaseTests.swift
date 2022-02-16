@@ -124,8 +124,14 @@ extension CacheFeedUseCaseTests {
         let exp = expectation(description: "wait for completion")
 
         var receivedError: Error?
-        sut.save(uniqueImages().model) { error in
-            receivedError = error
+        sut.save(uniqueImages().model) { result in
+            switch result {
+            case .failure(let error):
+                receivedError = error
+            default:
+                XCTFail("Expected failure, got \(result) instead", file: file, line: line)
+            }
+
             exp.fulfill()
         }
 
