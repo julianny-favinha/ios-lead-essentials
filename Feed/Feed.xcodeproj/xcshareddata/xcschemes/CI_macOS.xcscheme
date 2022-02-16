@@ -45,6 +45,13 @@
             BlueprintName = "FeedTests"
             ReferencedContainer = "container:Feed.xcodeproj">
          </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "3AAA8FDD27AAAACB000435E7"
+            BuildableName = "FeedCacheIntegrationTests.xctest"
+            BlueprintName = "FeedCacheIntegrationTests"
+            ReferencedContainer = "container:Feed.xcodeproj">
+         </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
          <TestableReference
