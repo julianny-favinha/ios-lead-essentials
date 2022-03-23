@@ -5,7 +5,6 @@
 //  Created by Julianny Favinha Donda on 02/03/22.
 //
 
-import Feed
 import Foundation
 import UIKit
 
