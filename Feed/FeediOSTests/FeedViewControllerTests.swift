@@ -40,12 +40,15 @@ extension FeedViewController {
         feedImageView(at: index) as? FeedImageCell
     }
 
-    func simulateFeedImageViewNotVisible(at row: Int) {
+    @discardableResult
+    func simulateFeedImageViewNotVisible(at row: Int) -> FeedImageCell? {
         let view = simulateFeedImageViewVisible(at: row)
 
         let delegate = tableView.delegate
         let index = IndexPath(row: row, section: feedImagesSection)
         delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
+
+        return view
     }
 
     func simulateFeedImageNearVisible(at row: Int) {
@@ -354,6 +357,18 @@ final class FeedViewControllerTests: XCTestCase {
 
         sut.simulateFeedImageNotNearVisible(at: 1)
         XCTAssertEqual(loader.cancelledImageURLs, [image0.url, image1.url])
+    }
+
+    func test_feedImageView_doesNotRenderLoadedImageWhenNotVisibleAnymore() {
+        let (loader, sut) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(with: [makeImage()], at: 0)
+
+        let view = sut.simulateFeedImageViewNotVisible(at: 0)
+
+        loader.completeImageLoading(with: UIImage.make(withColor: .red).pngData()!, at: 0)
+
+        XCTAssertNil(view?.renderedImage)
     }
 
     // MARK: - Helpers
