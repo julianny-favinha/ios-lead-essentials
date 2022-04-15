@@ -89,7 +89,7 @@ extension UIImage {
 
 private extension FeedImageCell {
     var isShowingLocation: Bool {
-        !locationLabel.isHidden
+        !locationContainer.isHidden
     }
 
     var locationText: String? {
