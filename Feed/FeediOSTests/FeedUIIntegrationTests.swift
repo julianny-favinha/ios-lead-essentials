@@ -130,7 +130,20 @@ extension UIButton {
     }
 }
 
-final class FeedViewControllerTests: XCTestCase {
+final class FeedUIIntegrationTests: XCTestCase {
+    func test_feedView_hasTitle() {
+        let (_, sut) = makeSUT()
+
+        sut.loadViewIfNeeded()
+
+        let bundle = Bundle(for: FeedViewController.self)
+        let key = "FEED_VIEW_TITLE"
+        let localizedTitle = bundle.localizedString(forKey: key, value: nil, table: "Feed")
+
+        XCTAssertNotEqual(localizedTitle, key)
+        XCTAssertEqual(sut.title, localizedTitle)
+    }
+
     func test_loadFeedActions_requestFeedFromLoader() {
         let (loader, sut) = makeSUT()
 
