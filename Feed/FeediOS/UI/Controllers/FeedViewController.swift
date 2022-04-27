@@ -5,6 +5,7 @@
 //  Created by Julianny Favinha Donda on 02/03/22.
 //
 
+import Feed
 import Foundation
 import UIKit
 
@@ -12,7 +13,9 @@ protocol FeedViewControllerDelegate {
     func didRequestFeedRefresh()
 }
 
-public final class FeedViewController: UITableViewController, FeedLoadingView {
+public final class FeedViewController: UITableViewController, FeedLoadingView, FeedErrorView {
+    @IBOutlet private(set) public var errorView: ErrorView?
+
     private var imageLoader: FeedImageDataLoader?
 
     var delegate: FeedViewControllerDelegate?
@@ -44,12 +47,12 @@ public final class FeedViewController: UITableViewController, FeedLoadingView {
         delegate?.didRequestFeedRefresh()
     }
 
-    func display(viewModel: FeedLoadingViewModel) {
-        if viewModel.isLoading {
-            refreshControl?.beginRefreshing()
-        } else {
-            refreshControl?.endRefreshing()
-        }
+    public func display(viewModel: FeedLoadingViewModel) {
+        refreshControl?.update(isRefreshing: viewModel.isLoading)
+    }
+
+    public func display(_ viewModel: FeedErrorViewModel) {
+        errorView?.message = viewModel.message
     }
 }
 
@@ -70,5 +73,11 @@ extension FeedViewController: UITableViewDataSourcePrefetching {
 
     private func removeCellController(forRowAt indexPath: IndexPath) {
         cellController(forRowAt: indexPath).cancelLoad()
+    }
+}
+
+extension UIRefreshControl {
+    func update(isRefreshing: Bool) {
+        isRefreshing ? beginRefreshing() : endRefreshing()
     }
 }

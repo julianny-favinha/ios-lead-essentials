@@ -136,7 +136,7 @@ final class FeedUIIntegrationTests: XCTestCase {
 
         sut.loadViewIfNeeded()
 
-        let bundle = Bundle(for: FeedViewController.self)
+        let bundle = Bundle(for: FeedPresenter.self)
         let key = "FEED_VIEW_TITLE"
         let localizedTitle = bundle.localizedString(forKey: key, value: nil, table: "Feed")
 

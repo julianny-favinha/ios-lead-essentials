@@ -5,10 +5,9 @@
 //  Created by Julianny Favinha Donda on 20/04/22.
 //
 
+import Feed
 import Foundation
 import XCTest
-
-@testable import FeediOS
 
 final class FeedLocalizationTests: XCTestCase {
     func test_localizedStrings_haveKeysAndValuesForAllSupportedLocalizations() {
