@@ -8,6 +8,14 @@
 import Feed
 import Foundation
 
+func uniqueImage() -> FeedImage {
+    FeedImage(
+        id: UUID(),
+        description: "description", location: "location",
+        url: URL(string: "https://any.com")!
+    )
+}
+
 func uniqueImages() -> (model: [FeedImage], local: [LocalFeedImage]) {
     let images = [
         FeedImage(id: UUID(), description: "description", location: "location", url: URL(string: "https://any.com")!),

@@ -1,24 +1,19 @@
 //
 //  FeedImagePresenter.swift
-//  FeediOS
+//  Feed
 //
-//  Created by Julianny Favinha Donda on 14/04/22.
+//  Created by Julianny Favinha Donda on 04/05/22.
 //
 
-import Feed
 import Foundation
 
-protocol FeedImageView {
-    associatedtype Image
-
-    func display(_ model: FeedImageViewModel<Image>)
-}
-
-final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
+public final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
     private let view: View
     private let imageTransformer: (Data) -> Image?
 
-    init(
+    private struct InvalidImageDataError: Error {}
+
+    public init(
         view: View,
         imageTransformer: @escaping (Data) -> Image?
     ) {
@@ -26,7 +21,7 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
         self.imageTransformer = imageTransformer
     }
 
-    func didStartLoadingImageData(for model: FeedImage) {
+    public func didStartLoadingImageData(for model: FeedImage) {
         view.display(
             .init(
                 description: model.description,
@@ -38,9 +33,7 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
         )
     }
 
-    private struct InvalidImageDataError: Error {}
-
-    func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
+    public func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
         guard let image = imageTransformer(data) else {
             return didFinishLoadingImageData(with: InvalidImageDataError(), for: model)
         }
@@ -56,7 +49,7 @@ final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == I
         )
     }
 
-    func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
+    public func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
         view.display(
             .init(
                 description: model.description,
