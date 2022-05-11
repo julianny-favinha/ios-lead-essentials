@@ -5,6 +5,7 @@
 //  Created by Julianny Favinha Donda on 05/05/22.
 //
 
+import CoreData
 import Feed
 import FeediOS
 import UIKit
@@ -22,14 +23,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let url = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
 
-        let session = URLSession(configuration: .ephemeral)
-        let client = URLSessionHTTPClient(session: session)
-        let feedLoader = RemoteFeedLoader(client: client, url: url)
-        let imageLoader = RemoteFeedImageDataLoader(client: client)
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        let remoteFeedLoader = RemoteFeedLoader(client: client, url: url)
+        let remoteImageLoader = RemoteFeedImageDataLoader(client: client)
 
-        let feedViewController = FeedUIComposer.feedComposedWith(loader: feedLoader, imageLoader: imageLoader)
+        let localStoreURL = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("feed-store.sqlite")
+        let localStore = try! CoreDataFeedStore(storeURL: localStoreURL)
+        let localFeedLoader = LocalFeedLoader(store: localStore, currentDate: Date.init)
+        let localImageLoader = LocalFeedImageDataLoader(store: localStore)
 
-        window?.rootViewController = feedViewController
+        window?.rootViewController = FeedUIComposer.feedComposedWith(
+            loader: FeedLoaderWithFallbackComposite(primary: remoteFeedLoader, fallback: localFeedLoader),
+            imageLoader: FeedImageDataLoaderWithFallbackComposite(primary: remoteImageLoader, fallback: localImageLoader)
+        )
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
