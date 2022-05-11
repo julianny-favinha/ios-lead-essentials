@@ -12,12 +12,8 @@ final class RemoteFeedItemsMapper {
         let items: [RemoteFeedItem]
     }
 
-    private enum HttpCodes: Int {
-        case ok = 200
-    }
-
     static func map(_ data: Data, from httpResponse: HTTPURLResponse) throws -> [RemoteFeedItem] {
-        guard httpResponse.statusCode == HttpCodes.ok.rawValue,
+        guard httpResponse.isOK,
               let root = try? JSONDecoder().decode(Root.self, from: data) else {
             throw RemoteFeedLoader.Error.invalidData
         }

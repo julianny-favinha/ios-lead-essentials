@@ -34,7 +34,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         [199, 201, 300, 404, 500].enumerated().forEach { index, statusCode in
             expect(sut, toCompleteWithResult: .failure(RemoteFeedLoader.Error.invalidData), when: {
                 let json = makeItemsJSON([])
-                client.complete(with: statusCode, data: json, at: index)
+                client.complete(withStatusCode: statusCode, data: json, at: index)
             })
         }
     }
@@ -53,7 +53,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
 
         expect(sut, toCompleteWithResult: .failure(RemoteFeedLoader.Error.invalidData), when: {
             let invalidJSON = Data()
-            client.complete(with: 200, data: invalidJSON)
+            client.complete(withStatusCode: 200, data: invalidJSON)
         })
     }
 
@@ -62,7 +62,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
 
         expect(sut, toCompleteWithResult: .success([]), when: {
             let emptyListJSON = makeItemsJSON([])
-            client.complete(with: 200, data: emptyListJSON)
+            client.complete(withStatusCode: 200, data: emptyListJSON)
         })
     }
 
@@ -74,7 +74,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
 
         expect(sut, toCompleteWithResult: .success([item1.model, item2.model]), when: {
             let json = makeItemsJSON([item1.json, item2.json])
-            client.complete(with: 200, data: json)
+            client.complete(withStatusCode: 200, data: json)
         })
     }
 
@@ -87,7 +87,7 @@ final class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         sut?.load { capturedResults.append($0) }
 
         sut = nil
-        client.complete(with: 200, data: makeItemsJSON([]))
+        client.complete(withStatusCode: 200, data: makeItemsJSON([]))
 
         XCTAssertTrue(capturedResults.isEmpty)
     }
@@ -148,33 +148,37 @@ extension LoadFeedFromRemoteUseCaseTests {
 
 extension LoadFeedFromRemoteUseCaseTests {
     private class HTTPClientSpy: HTTPClient {
-        var requestedURLs: [URL] {
-            messages.map { $0.url }
-        }
-
-        var completions: [(HTTPClient.Result) -> Void] {
-            messages.map { $0.completion }
+        private struct Task: HTTPClientTask {
+            let callback: () -> Void
+            func cancel() { callback() }
         }
 
         private var messages = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
+        private(set) var cancelledURLs = [URL]()
 
-        func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
-            messages.append((url: url, completion: completion))
+        var requestedURLs: [URL] {
+            return messages.map { $0.url }
+        }
+
+        func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
+            messages.append((url, completion))
+            return Task { [weak self] in
+                self?.cancelledURLs.append(url)
+            }
         }
 
         func complete(with error: Error, at index: Int = 0) {
             messages[index].completion(.failure(error))
         }
 
-        func complete(with statusCode: Int, data: Data = Data(), at index: Int = 0) {
-            let httpURLResponse = HTTPURLResponse(
+        func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
+            let response = HTTPURLResponse(
                 url: requestedURLs[index],
-                statusCode: statusCode,
+                statusCode: code,
                 httpVersion: nil,
                 headerFields: nil
-            )
-
-            messages[index].completion(.success((httpURLResponse!, data)))
+            )!
+            messages[index].completion(.success((response, data)))
         }
     }
 }
