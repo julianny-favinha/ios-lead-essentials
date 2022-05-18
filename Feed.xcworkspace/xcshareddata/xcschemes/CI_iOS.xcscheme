@@ -17,7 +17,7 @@
                BlueprintIdentifier = "3A899A082734837C0054CEA0"
                BuildableName = "Feed.framework"
                BlueprintName = "Feed"
-               ReferencedContainer = "container:Feed.xcodeproj">
+               ReferencedContainer = "container:Feed/Feed.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -36,28 +36,28 @@
             BlueprintIdentifier = "3A88AC5A27453B9E00CBCB60"
             BuildableName = "FeedAPIEndToEndTests.xctest"
             BlueprintName = "FeedAPIEndToEndTests"
-            ReferencedContainer = "container:Feed.xcodeproj">
+            ReferencedContainer = "container:Feed/Feed.xcodeproj">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3A899A122734837D0054CEA0"
             BuildableName = "FeedTests.xctest"
             BlueprintName = "FeedTests"
-            ReferencedContainer = "container:Feed.xcodeproj">
+            ReferencedContainer = "container:Feed/Feed.xcodeproj">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3AAA8FDD27AAAACB000435E7"
             BuildableName = "FeedCacheIntegrationTests.xctest"
             BlueprintName = "FeedCacheIntegrationTests"
-            ReferencedContainer = "container:Feed.xcodeproj">
+            ReferencedContainer = "container:Feed/Feed.xcodeproj">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3A1E6C2E27BD2160004C8914"
             BuildableName = "FeediOSTests.xctest"
             BlueprintName = "FeediOSTests"
-            ReferencedContainer = "container:Feed.xcodeproj">
+            ReferencedContainer = "container:Feed/Feed.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
@@ -69,7 +69,7 @@
                BlueprintIdentifier = "3A88AC5A27453B9E00CBCB60"
                BuildableName = "FeedAPIEndToEndTests.xctest"
                BlueprintName = "FeedAPIEndToEndTests"
-               ReferencedContainer = "container:Feed.xcodeproj">
+               ReferencedContainer = "container:Feed/Feed.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -80,7 +80,7 @@
                BlueprintIdentifier = "3A899A122734837D0054CEA0"
                BuildableName = "FeedTests.xctest"
                BlueprintName = "FeedTests"
-               ReferencedContainer = "container:Feed.xcodeproj">
+               ReferencedContainer = "container:Feed/Feed.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -91,7 +91,7 @@
                BlueprintIdentifier = "3AAA8FDD27AAAACB000435E7"
                BuildableName = "FeedCacheIntegrationTests.xctest"
                BlueprintName = "FeedCacheIntegrationTests"
-               ReferencedContainer = "container:Feed.xcodeproj">
+               ReferencedContainer = "container:Feed/Feed.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -102,7 +102,18 @@
                BlueprintIdentifier = "3A1E6C2E27BD2160004C8914"
                BuildableName = "FeediOSTests.xctest"
                BlueprintName = "FeediOSTests"
-               ReferencedContainer = "container:Feed.xcodeproj">
+               ReferencedContainer = "container:Feed/Feed.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3AF004AD2835207300FB9E30"
+               BuildableName = "FeedAppUIAcceptanceTests.xctest"
+               BlueprintName = "FeedAppUIAcceptanceTests"
+               ReferencedContainer = "container:FeedApp/FeedApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -130,7 +141,7 @@
             BlueprintIdentifier = "3A899A082734837C0054CEA0"
             BuildableName = "Feed.framework"
             BlueprintName = "Feed"
-            ReferencedContainer = "container:Feed.xcodeproj">
+            ReferencedContainer = "container:Feed/Feed.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
