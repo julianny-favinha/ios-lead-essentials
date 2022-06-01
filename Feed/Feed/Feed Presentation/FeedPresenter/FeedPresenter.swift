@@ -17,6 +17,10 @@ public protocol FeedView {
 
 public struct FeedLoadingViewModel {
     public let isLoading: Bool
+
+    public init(isLoading: Bool) {
+        self.isLoading = isLoading
+    }
 }
 
 public protocol FeedLoadingView {

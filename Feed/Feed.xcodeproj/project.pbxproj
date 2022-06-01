@@ -15,6 +15,7 @@
 		3A122AE927C65B73002B50A3 /* Feed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A899A092734837C0054CEA0 /* Feed.framework */; platformFilter = ios; };
 		3A122AEA27C65B73002B50A3 /* Feed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3A899A092734837C0054CEA0 /* Feed.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3A122AEE27C65C9A002B50A3 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A88AC53274527CC00CBCB60 /* XCTestCase+MemoryLeakTracking.swift */; };
+		3A14A41828478A97009EC76E /* FeedSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A14A41728478A97009EC76E /* FeedSnapshotTests.swift */; };
 		3A1E6C2A27BD215F004C8914 /* FeediOS.docc in Sources */ = {isa = PBXBuildFile; fileRef = 3A1E6C2927BD215F004C8914 /* FeediOS.docc */; };
 		3A1E6C3027BD2160004C8914 /* FeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A1E6C2627BD215F004C8914 /* FeediOS.framework */; };
 		3A20B881277C9C5C00E49BC0 /* LoadFeedFromCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A20B880277C9C5C00E49BC0 /* LoadFeedFromCacheUseCaseTests.swift */; };
@@ -138,6 +139,7 @@
 		3A0D8F3C2822B0CD00F12C5A /* FeedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageView.swift; sourceTree = "<group>"; };
 		3A0D8F3E2822B0D600F12C5A /* FeedImagePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImagePresenter.swift; sourceTree = "<group>"; };
 		3A122AE627C65866002B50A3 /* FeedUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIIntegrationTests.swift; sourceTree = "<group>"; };
+		3A14A41728478A97009EC76E /* FeedSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSnapshotTests.swift; sourceTree = "<group>"; };
 		3A1E6C2627BD215F004C8914 /* FeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A1E6C2927BD215F004C8914 /* FeediOS.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = FeediOS.docc; sourceTree = "<group>"; };
 		3A1E6C2F27BD2160004C8914 /* FeediOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FeediOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -310,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				3A122AE627C65866002B50A3 /* FeedUIIntegrationTests.swift */,
+				3A14A41728478A97009EC76E /* FeedSnapshotTests.swift */,
 			);
 			path = FeediOSTests;
 			sourceTree = "<group>";
@@ -806,6 +809,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A122AE727C65866002B50A3 /* FeedUIIntegrationTests.swift in Sources */,
+				3A14A41828478A97009EC76E /* FeedSnapshotTests.swift in Sources */,
 				3A122AEE27C65C9A002B50A3 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
