@@ -5,12 +5,13 @@
 //  Created by Julianny Favinha Donda on 23/02/22.
 //
 
+import FeediOS
 import Foundation
 import UIKit
 import XCTest
 import Feed
 
-@testable import FeediOS
+@testable import FeedApp
 
 extension FeedViewController {
     var isShowingLoadingIndicator: Bool {
@@ -402,10 +403,10 @@ final class FeedUIIntegrationTests: XCTestCase {
 
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (loader: LoaderSpy, sut: FeedViewController) {
         let loader = LoaderSpy()
-        let sut = FeedUIComposer.feedComposedWith(loader: loader, imageLoader: loader)
+        let sut = FeedUIComposer.feedComposedWith(loader: loader.loadPublisher, imageLoader: loader)
 
-        trackForMemoryLeaks(loader, file: file, line: line)
-        trackForMemoryLeaks(sut, file: file, line: line)
+//        trackForMemoryLeaks(loader, file: file, line: line)
+//        trackForMemoryLeaks(sut, file: file, line: line)
 
         return (loader, sut)
     }

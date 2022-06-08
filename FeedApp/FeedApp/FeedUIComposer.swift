@@ -5,18 +5,20 @@
 //  Created by Julianny Favinha Donda on 09/03/22.
 //
 
+import Combine
 import Feed
+import FeediOS
 import Foundation
 import UIKit
 
 public final class FeedUIComposer {
     private init() {}
 
-    public static func feedComposedWith(
-        loader: FeedLoader,
+    static func feedComposedWith(
+        loader: @escaping () -> FeedLoader.Publisher,
         imageLoader: FeedImageDataLoader
     ) -> FeedViewController {
-        let presenterAdapter = FeedLoaderPresentationAdapter(feedLoader: MainQueueDispatchDecorator(decoratee: loader))
+        let presenterAdapter = FeedLoaderPresentationAdapter(feedLoader: { loader().dispatchOnMainQueue() })
 
         let bundle = Bundle(for: FeedViewController.self)
         let storyboard = UIStoryboard(name: "Feed", bundle: bundle)
@@ -48,14 +50,6 @@ final class MainQueueDispatchDecorator<T> {
         }
 
         completion()
-    }
-}
-
-extension MainQueueDispatchDecorator: FeedLoader where T == FeedLoader {
-    func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        decoratee.load { [weak self] result in
-            self?.dispatch { completion(result) }
-        }
     }
 }
 
@@ -114,25 +108,29 @@ private final class FeedViewAdapter: FeedView {
 }
 
 private final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
-    private let feedLoader: FeedLoader
+    private let feedLoader: () -> FeedLoader.Publisher
     var presenter: FeedPresenter?
+    private var cancellable: Cancellable?
 
-    init(feedLoader: FeedLoader) {
+    init(feedLoader: @escaping () -> FeedLoader.Publisher) {
         self.feedLoader = feedLoader
     }
 
     func didRequestFeedRefresh() {
         presenter?.didStartLoadingFeed()
 
-        feedLoader.load { [weak self] result in
-            switch result {
-            case let .success(feed):
+        cancellable = feedLoader().sink(
+            receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .finished: break
+                case let .failure(error):
+                    self?.presenter?.didFinishLoadingFeed(with: error)
+                }
+            },
+            receiveValue: { [weak self] feed in
                 self?.presenter?.didFinishLoadingFeed(with: feed)
-
-            case let .failure(error):
-                self?.presenter?.didFinishLoadingFeed(with: error)
             }
-        }
+        )
     }
 }
 

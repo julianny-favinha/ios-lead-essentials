@@ -9,7 +9,7 @@ import Feed
 import Foundation
 import UIKit
 
-protocol FeedViewControllerDelegate {
+public protocol FeedViewControllerDelegate {
     func didRequestFeedRefresh()
 }
 
@@ -18,9 +18,9 @@ public final class FeedViewController: UITableViewController, FeedLoadingView, F
 
     private var imageLoader: FeedImageDataLoader?
 
-    var delegate: FeedViewControllerDelegate?
+    public var delegate: FeedViewControllerDelegate?
 
-    var tableModel = [FeedImageCellController]() {
+    public var tableModel = [FeedImageCellController]() {
         didSet {
             tableView.reloadData()
         }
